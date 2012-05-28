@@ -38,14 +38,14 @@ affiche_orientation(D):-D='o',write('<').
 
 
 /* Jeu */
-/* On défini un coup comme une liste contenant la case initiale, la direction et la nouvelle orientation. Ex : [(11,n),s,(12,e)] */
+/* On défini un coup comme une liste contenant la postition initiale et celle d'arrivée'. Ex : [(11,n),(12,e)] */
 
 /* Dans le cas où la case destination n'est pas déjà occupée, on utilise coup_possible */
-coup_possible([E,R,M,Joueur], [(Depart, _), _, (Arrivee, _)]):- memberchk((Arrivee,_),E), !, fail.
-coup_possible(Plateau, [(Depart, _), _, (Arrivee, _)]):-  Arrivee is Depart+1, !.
-coup_possible(Plateau, [(Depart, _), _, (Arrivee, _)]):-  Arrivee is Depart-1, !.
-coup_possible(Plateau, [(Depart, _), _, (Arrivee, _)]):-  Arrivee is Depart+10, !.
-coup_possible(Plateau, [(Depart, _), _, (Arrivee, _)]):-  Arrivee is Depart-10, !.
+coup_possible([E,R,M,Joueur], [(Depart, _), (Arrivee, _)]):- memberchk((Arrivee,_),E), !, fail.
+coup_possible(Plateau, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart+1, !.
+coup_possible(Plateau, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart-1, !.
+coup_possible(Plateau, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart+10, !.
+coup_possible(Plateau, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart-10, !.
 
 test(X):- plateau_test(X), coup_possible(X, [(32,s),o,(33,e)]).
 
