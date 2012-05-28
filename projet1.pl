@@ -15,8 +15,8 @@ ligne(I,X):- I<6,!, colonnes(1,X), nl, I_Affichage is 6-I, write(I_Affichage), c
 ligne(6,X):-colonnes(1,X),nl,chiffres(1).
 ligne(I,X):-I>5.
 
-chiffres(I):- I<6, !, write('   '), write(I), write(' '), New_I is I+1, chiffres_premiere_ligne(New_I).
-chiffres(I):-nl.
+chiffres(I):- I<6, !, write('   '), write(I), write(''), New_I is I+1, chiffres(New_I).
+chiffres(I):- nl.
 colonnes(1,X):- !, write('  ____'), colonnes(2,X).
 colonnes(J,X):- J<6,!, write('____'), New_J is J+1, colonnes(New_J,X).
 colonnes(J,X):- J>5.
