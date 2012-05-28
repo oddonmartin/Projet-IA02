@@ -5,7 +5,7 @@ depart(X):-plateau_test(X), affiche_plateau(X).
 plateau_depart(X):- X =[[(0,0),(0,0),(0,0),(0,0),(0,0)],[(0,0),(0,0),(0,0),(0,0),(0,0)],
 [32,33,34],e].
 
-plateau_test(X):- X =[[(11,n),(32,s),(0,0),(0,0),(0,0)],[(45,e),(34,s),(0,0),(0,0),(0,0)],
+plateau_test(X):- X =[[(11,n),(32,s),(31,n),(41,n),(0,0)],[(45,e),(34,s),(0,0),(0,0),(0,0)],
 [12,33,55],e].
 
 affiche_plateau(X) :- ligne(1,X).
@@ -54,7 +54,30 @@ coup_possible(Plateau, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart-10, !.
 
 test(X):- plateau_test(X), coup_possible(X, [(45,e),(35,e)]).
 
-poussee_possible(Plateau, Case, Direction).
+
+animaux_check((I,n),[E,R,M,Joueur]):- memberchk((I,n),E).
+animaux_check((I,n),[E,R,M,Joueur]):- memberchk((I,n),R).
+
+animaux_meme_sens(P,I,O,0):- I>55,!.
+animaux_meme_sens(P,I,O,0):- I<11,!.
+animaux_meme_sens([E,R,M,Joueur],I,O,X1):- case_suivante(I,O,I1) , animaux_meme_sens([E,R,M,Joueur],I1,n,X), animaux_check((I,n),[E,R,_,_]), X1 is X+1.
+animaux_meme_sens([E,R,M,Joueur],I,O,X):- case_suivante(I,O,I1), animaux_meme_sens([E,R,M,Joueur],I1,n,X).
+
+case_nord(I,J):- J is I+10.
+case_sud(I,J):- J is I-10.
+case_est(I,J):- J is J+1.
+case_ouest(I,J):- J is J-1.
+
+case_suivante(I,n,I1):- case_nord(I,I1).
+case_suivante(I,s,I1):- case_sud(I,I1).
+case_suivante(I,e,I1):- case_est(I,I1).
+case_suivante(I,o,I1):- case_ouest(I,I1).
+
+
+
+test2(P,X):- plateau_test(P), animaux_meme_sens(P,41,n,X).
+/*animaux_sens_inverse.
+poussee_possible(Plateau, [(I,_),O], n):- animaux_meme_sens(Plateau,I,n,x), animaux_sens_inverse(Plateau,I,n,y), x>y.*/
 
 
 
