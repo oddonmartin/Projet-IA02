@@ -1,5 +1,6 @@
 /* Affichage et initialisation du plateau */
 
+<<<<<<< HEAD
 depart(X):-plateau_test(X), affiche_plateau(X).
 
 plateau_depart(X):- X =[[(0,0),(0,0),(0,0),(0,0),(0,0)],[(0,0),(0,0),(0,0),(0,0),(0,0)],
@@ -29,11 +30,13 @@ afficher_pion(I,J,[E,_,_,_]):-Case is I*10+J, memberchk((Case,D),E),!, write(' e
 afficher_pion(I,J,[_,R,_,_]):-Case is I*10+J, memberchk((Case,D),R),!, write(' r'), affiche_orientation(D).
 afficher_pion(I,J,[_,_,M,_]):-Case is I*10+J, memberchk(Case,M),!, write(' m ').
 afficher_pion(_,_,[_,_,_,_]):-write('   ').
+=======
+%siam.pl
 
-affiche_orientation(D):- D='n',!,write('^').
-affiche_orientation(D):-D='s',!,write('v').
-affiche_orientation(D):-D='e',!,write('>').
-affiche_orientation(D):-D='o',write('<').
+depart(X):-plateau_test(X), affiche_plateau(X).
+
+>>>>>>> TP
+
 
 
 
@@ -51,10 +54,17 @@ coup_possible([_,_,M,_], [(_, _), (Arrivee, _)]):- memberchk((Arrivee),M), !, wr
 coup_possible([E,_,_,e], [(Depart, _), (_, _)]):- \+memberchk((Depart,_),E), !, write('aucun elephant au depart de cette case'), fail.
 coup_possible([_,R,_,r], [(Depart, _), (_, _)]):- \+memberchk((Depart,_),R), !, write('aucun rhinoceros au depart de cette case'),fail.
 
+<<<<<<< HEAD
 coup_possible(_, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart+1, !.
 coup_possible(_, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart-1, !.
 coup_possible(_, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart+10, !.
 coup_possible(_, [(Depart, _), (Arrivee, _)]):-  Arrivee is Depart-10, !.
+=======
+coup_possible(_, [(Depart, _), (Arrivee, _)]):-  case_est(Depart, Arrivee), !.
+coup_possible(_, [(Depart, _), (Arrivee, _)]):-  case_ouest(Depart, Arrivee), !.
+coup_possible(_, [(Depart, _), (Arrivee, _)]):-  case_nord(Depart, Arrivee), !.
+coup_possible(_, [(Depart, _), (Arrivee, _)]):-  case_sud(Depart, Arrivee), !.
+>>>>>>> TP
 
 test(X):- plateau_test(X), coup_possible(X, [(45,e),(45,s)]).
 
@@ -73,8 +83,13 @@ case_suivante(I,e,I1):- case_est(I,I1).
 case_suivante(I,o,I1):- case_ouest(I,I1).
 
 
+<<<<<<< HEAD
 /*animaux_meme_sens détermine les animaux qui sont dans le meme sens, 
 il s'arrete de compter quand il tombe sur une case vide, ou une case hors du jeu*/
+=======
+/*animaux_meme_sens détermine les animaux qui sont dans le meme sens, */
+/*il s'arrete de compter quand il tombe sur une case vide, ou une case hors du jeu*/
+>>>>>>> TP
 animaux_meme_sens([E,R,M,_],I,_,0):- \+animaux_check((I,_),[E,R,_,_]), \+memberchk(I,M),!.
 animaux_meme_sens(_,I,n,0):- I>55,!.
 animaux_meme_sens(_,I,s,0):- I<11,!.
@@ -85,8 +100,13 @@ animaux_meme_sens([E,R,M,_],I,O,X1):- case_suivante(I,O,I1) , animaux_meme_sens(
 animaux_meme_sens([E,R,M,_],I,O,X):- case_suivante(I,O,I1), animaux_meme_sens([E,R,M,_],I1,O,X).
 
 
+<<<<<<< HEAD
 /*animaux_sens_inverse détermine les animaux en sens inverse, 
 il s'arrete de compter quand il tombe sur une case vide ou une case hors du jeu*/
+=======
+/*animaux_sens_inverse détermine les animaux en sens inverse, */
+/*il s'arrete de compter quand il tombe sur une case vide ou une case hors du jeu*/
+>>>>>>> TP
 inverse_div(n,s).
 inverse_div(s,n).
 inverse_div(e,o).
@@ -110,6 +130,12 @@ nb_montagnes(_,I,e,0):- X is I mod 10, X>5,!.
 nb_montagnes(_,I,o,0):- 0 is I mod 10,!.
 nb_montagnes([E,R,M,_],I,O,X1):- case_suivante(I,O,I1), nb_montagnes([E,R,M,_],I1,O,X), memberchk(I,M),!, X1 is X+1. 
 nb_montagnes([E,R,M,_],I,O,X):- case_suivante(I,O,I1), nb_montagnes([E,R,M,_],I1,O,X). 
+<<<<<<< HEAD
+
+test2(P,X):- plateau_test(P), animaux_meme_sens(P,31,e,X).
+test3(P,X):- plateau_test(P), animaux_sens_inverse(P,31,e,X).
+test4(P,X):- plateau_test(P), nb_montagnes(P,31,e,X).
+=======
 
 test2(P,X):- plateau_test(P), animaux_meme_sens(P,31,e,X).
 test3(P,X):- plateau_test(P), animaux_sens_inverse(P,31,e,X).
@@ -119,4 +145,12 @@ poussee_possible(Plateau, I, O):- animaux_meme_sens(Plateau,I,O,X), write('X='),
 nb_montagnes(Plateau,I,O,Z), write('Z='), write(Z),Res is Y+Z,write(' Res='),write(Res), X>Res.
 
 test5(P):- plateau_test(P),poussee_possible(P,31,e).
+>>>>>>> TP
 
+poussee_possible(Plateau, I, O):- animaux_meme_sens(Plateau,I,O,X), write('X='),write(X), animaux_sens_inverse(Plateau,I,O,Y),write('Y='),write(Y), 
+nb_montagnes(Plateau,I,O,Z), write('Z='), write(Z),Res is Y+Z,write(' Res='),write(Res), X>Res.
+
+test5(P):- plateau_test(P),poussee_possible(P,31,e).
+
+/* Jeu humain */
+jeu_humain(X):-
