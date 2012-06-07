@@ -1,10 +1,10 @@
 plateau_depart(X):- X =[[(0,0),(0,0),(0,0),(0,0),(0,0)],[(0,0),(0,0),(0,0),(0,0),(0,0)],
 [32,33,34],e].
 
-plateau_test(X):- X =[[(11,n),(21,n),(31,e),(32,e),(0,0)],[(45,e),(34,o),(0,0),(0,0),(0,0)],
-[12,33,35],e].
+plateau_test(X):- X =[[(11,n),(31,e),(32,e),(55,o),(0,0)],[(0,0),(45,e),(34,o),(35,n),(0,0)],
+[12,33,21],e].
 
-affiche_plateau(X) :- ligne(1,X).
+affiche_plateau(X) :- ligne(1,X),!.
 
 ligne(0,X):-ligne(1,X).
 ligne(I,X):- I<6,!, colonnes(1,X), nl, I_Affichage is 6-I, write(I_Affichage), colonnes2(1,I,X),nl, New_i is I+1, ligne(New_i,X).
