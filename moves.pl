@@ -41,15 +41,25 @@ case_suivante(I,o,I1):- est_une_case(I), case_ouest(I,I1), !.
 case_vide([E,R,M,_],I):- \+animaux_check((I,_),[E,R,M,_]), \+memberchk(I,M).
 
 
-remplacer([E,_,_,_], Case, NewCase, NewPlateau):- memberchk(Case,E), remplacer_case(E, Case, NewCase, NewPlateau),!.
-remplacer([_,R,_,_], Case, NewCase, NewPlateau):- memberchk(Case,R), remplacer_case(R, Case, NewCase, NewPlateau),!.
-remplacer([_,_,M,_], Case, NewCase, NewPlateau):- memberchk(Case,M), remplacer_case(M, Case, NewCase, NewPlateau).
+remplacer([E,R,M,J], Case, NewCase, [NewPlateau,R,M,J]):- memberchk(Case,E), remplacer_case(E, Case, NewCase, NewPlateau),!.
+remplacer([E,R,M,J], Case, NewCase, [E, NewPlateau, M, J]):- memberchk(Case,R), remplacer_case(R, Case, NewCase, NewPlateau),!.
+remplacer([E,R,M,J], Case, NewCase, [E, R, NewPlateau, J]):- memberchk(Case,M), remplacer_case(M, Case, NewCase, NewPlateau).
 
 remplacer_case([], _, _, []).
 remplacer_case([I|Q], I, NewI, [NewI|Q]):-!.
 remplacer_case([T|Q], I, NewI, [T|Q2]):-remplacer_case(Q, I, NewI, Q2).
 
-jouer_coup(PlateauInitial, [(I,0),Sens,NewOrient], NouveauPlateau):- case_suivante(I, Sens, I1), remplacer(PlateauInitial, [I,0], [I1,NewOrient], NouveauPlateau).
+jouer_coup(PlateauInitial, [(I,O),Sens,NewOrient], NouveauPlateau):- 
+case_suivante(I, Sens, I1), 
+jouer_coup_suivant(NouveauPlateauTmp, [(I1,_),Sens,_], NouveauPlateau),
+remplacer(PlateauInitial, (I,O), (I1,NewOrient), NouveauPlateauTmp).
+
+jouer_coup_suivant(NouveauPlateauTmp, [(I,_),Sens,_], NouveauPlateau):-
+animaux_check((I,O1),NouveauPlateauTmp),!,
+jouer_coup(NouveauPlateauTmp,[(I,O1),Sens,O1],NouveauPlateau).
+
+jouer_coup_suivant(_, _, N).
+
 
 
 
