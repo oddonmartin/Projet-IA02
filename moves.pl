@@ -43,7 +43,7 @@ case_vide([E,R,M,_],I):- \+animaux_check((I,_),[E,R,M,_]), \+memberchk(I,M).
 
 remplacer([E,R,M,J], Case, NewCase, [NewPlateau,R,M,J]):- memberchk(Case,E), remplacer_case(E, Case, NewCase, NewPlateau),!.
 remplacer([E,R,M,J], Case, NewCase, [E, NewPlateau, M, J]):- memberchk(Case,R), remplacer_case(R, Case, NewCase, NewPlateau),!.
-remplacer([E,R,M,J], Case, (I,_), [E, R, NewPlateau, J]):- memberchk(Case,M), remplacer_case(M, I, NewCase, NewPlateau).
+remplacer([E,R,M,J], (I1,_), (I2,_), [E, R, NewPlateau, J]):- memberchk(I1,M), remplacer_case(M, I1, I2, NewPlateau).
 
 remplacer_case([], _, _, []).
 remplacer_case([I|Q], I, NewI, [NewI|Q]):-!.
@@ -60,7 +60,7 @@ jouer_coup(PlateauInitial,[(I,O1),Sens,O1],NouveauPlateauTmp).
 
 jouer_coup_suivant([E,R,M,J], [(I,_),Sens,_], NouveauPlateauTmp):-
 memberchk(I,M),!,
-jouer_coup(PlateauInitial,[(I,_),Sens,_],NouveauPlateauTmp).
+jouer_coup([E,R,M,J],[(I,m),Sens,_],NouveauPlateauTmp).
 
 jouer_coup_suivant(PlateauInitial, _, PlateauInitial).
 
