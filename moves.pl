@@ -1,12 +1,22 @@
 % coup=[11,n,o]
+/* Vérifie si le joueur veut jouer un de ses pions ou en faire entrer un => a finir parce que ça marche pas avec l'entrée */
+coup_possible([E,R,M,J], [(I,_), Sens, _]):- 
+liste_pions([E,R,M,J], L), memberchk((I,_),L).
 
-coup_possible([E,R,M,J], [Depart, Sens, _]):-liste_pions([E,R,M,J], L), memberchk((I,_),L), case_suivante(Depart,Sens,I1), \+animaux_check((I1,_),[E,R,M,_]), \+memberchk(I1,M).
+coup_possible([E,R,M,J], [(I,_), Sens, _]):- liste_pions([E,R,M,J], L), pion_libre(L), case_bord(I).
+
+case_bord(11). case_bord(12). case_bord(13). case_bord(14). case_bord(15). 
+case_bord(21). case_bord(31). case_bord(41). case_bord(51). 
+case_bord(25). case_bord(35). case_bord(45). 
+case_bord(52). case_bord(53). case_bord(54). case_bord(55). 
+
+coup_possible([E,R,M,J], [Depart, Sens, _]):-case_suivante(Depart,Sens,I1), \+animaux_check((I1,_),[E,R,M,_]), \+memberchk(I1,M).
 
 liste_pions([E,R,_,e], E).
 liste_pions([E,R,_,r], R).
 
 
-poussee_possible(P, [(I,O),Sens,NewO]):-poussee_possible(P, I, Sens, 0). /* à tester */
+poussee_possible(P, [(I,O),Sens,NewO]):-poussee_possible(P, I, Sens, 1).
 poussee_possible(P, I, O, X1):- case_suivante(I, O, I1), case_vide(P, I1),!.
 poussee_possible(P, I, O, X1):-
 	case_suivante(I, O, I1),

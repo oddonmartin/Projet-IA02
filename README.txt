@@ -34,3 +34,19 @@ L=[1] ?
 L=[4] ?
 L=[9] ?
 L=[16] ?
+
+
+------------------------------------------------------------
+CE QUE J'AI REUSSI A FAIRE :
+- Questions pour entrer la case, le sens du mouvement et la nouvelle orientation.
+- Verification si c'est bien le pion du joueur et pas une montagne
+- Vérification coup_possible, si oui on essaye pousse_possible (cf. commentaires coup_possible).
+
+
+ENCORE A FAIRE POUR LE JEU UTILISATEURS
+------------------------------------------------------------
+- Entrée sur le plateau : il faut entrer la case sur laquelle on veut aller
+- Il faut mettre le pion à (0,0) dans poussee_possible quand il sort du plateau
+- poussee_possible : on peut pousser les montagnes
+- poussee_possible : quand tu as un animal qui pousse une montagne tout seul, il peut pousser la montagne sans être dans le bon sens... 
+
