@@ -6,12 +6,13 @@ liste_pions([E,R,_,e], E).
 liste_pions([E,R,_,r], R).
 
 
+poussee_possible(P, [(I,O),Sens,NewO]):-poussee_possible(P, I, Sens, 0). /* à tester */
 poussee_possible(P, I, O, X1):- case_suivante(I, O, I1), case_vide(P, I1),!.
 poussee_possible(P, I, O, X1):-
-case_suivante(I, O, I1),
-compteur(P, I1, O, X),
-X2 is X1 + X,
-X2>0, poussee_possible(P, I1, O, X2).
+	case_suivante(I, O, I1),
+	compteur(P, I1, O, X),
+	X2 is X1 + X,
+	X2>0, poussee_possible(P, I1, O, X2).
 
 compteur(P, I, O, 1):- animaux_check((I,O),P), !.
 compteur(P, I, O, -1):- inverse_dir(O, O1), animaux_check((I,O1),P), !.
