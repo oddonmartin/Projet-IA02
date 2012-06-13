@@ -3,7 +3,9 @@
 coup_possible([E,R,M,J], [(I,_), Sens, _]):- 
 liste_pions([E,R,M,J], L), memberchk((I,_),L).
 
-coup_possible([E,R,M,J], [(I,_), Sens, _]):- liste_pions([E,R,M,J], L), pion_libre(L), case_bord(I).
+coup_possible([E,R,M,J], [(I,_), Sens, _]):- liste_pions([E,R,M,J], L), pion_libre(L), case_bord(I), joueur_suivant(J,J2), liste_pions([E,R,M,J2], L2), \+memberchk((I_),L2).
+
+coup_possible(_,_):- !, nl, write('Mauvaise entrée, veuillez recommencer'), nl, fail.
 
 case_bord(11). case_bord(12). case_bord(13). case_bord(14). case_bord(15). 
 case_bord(21). case_bord(31). case_bord(41). case_bord(51). 
@@ -37,7 +39,7 @@ inverse_dir(s,n).
 inverse_dir(e,o).
 inverse_dir(o,e).
 
-est_une_case(I):- I=<55, I>=11, X1 is I mod 10, X1=<5, X2 is I mod 10, X2>0.
+est_une_case(I):- integer(I), I=<55, I>=11, X1 is I mod 10, X1=<5, X2 is I mod 10, X2>0.
 
 case_nord(I,J):- J is I+10.
 case_sud(I,J):- J is I-10.

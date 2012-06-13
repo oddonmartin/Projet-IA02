@@ -41,6 +41,8 @@ CE QUE J'AI REUSSI A FAIRE :
 - Questions pour entrer la case, le sens du mouvement et la nouvelle orientation.
 - Verification si c'est bien le pion du joueur et pas une montagne
 - Vérification coup_possible, si oui on essaye pousse_possible (cf. commentaires coup_possible).
+- Test si il reste des montagnes après un coup, sinon l'utilisateur qui joue a gagner et on fail
+- Test si la case est bien un entier => plus robuste
 
 
 ENCORE A FAIRE POUR LE JEU UTILISATEURS
