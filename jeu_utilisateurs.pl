@@ -6,7 +6,7 @@ J1 : e, J2 : r => joueurs
 jeu_utilisateur([E,R,M,J]):-
 	repeat,
 	nl, write('Joueur '), write(J),nl,
-	affiche_plateau([E,R,M,J]),
+	affiche_plateau([E,R,M,J]), write([E,R,M,J]),
 	demande_coup(Coup,[E,R,M,J]),
 	coup_utilisateur([E,R,M,J], Coup,[NewE, NewR, NewM, _]),
 	reste_montagnes(M, J),
@@ -41,7 +41,7 @@ reste_montagnes([_|Q], _).
 /* Demande et modification du plateau */
 
 coup_utilisateur(Plateau, Coup, NouveauPlateau):-
-	coup_possible(Plateau, Coup),
+	coup_possible(Plateau, Coup, Entree), /* Entree =1 si entrée sur le plateau, 0 sinon. */
 	poussee_possible(Plateau, Coup),
-	jouer_coup(Plateau, Coup, NouveauPlateau).
+	jouer_coup(Plateau, Coup, NouveauPlateau, Entree).
 
