@@ -61,9 +61,11 @@ case_vide([E,R,M,_],I):- \+animaux_check((I,_),[E,R,M,_]), \+memberchk(I,M).
 
 /* jouer_coup, Cas entrée sur le plateau */
 jouer_coup(PlateauInitial, [(I,O),Sens,NewOrient], NouveauPlateau, 1):- 
-case_suivante(I, Sens, I1), 
-jouer_coup_suivant(PlateauInitial, [(I1,_),Sens,_], NouveauPlateauTmp, 0),
-remplacer(NouveauPlateauTmp, (0,0), (I,NewOrient), NouveauPlateau).
+/*case_suivante(I, Sens, I1), */
+jouer_coup_suivant(PlateauInitial, [(I,_),Sens,_], NouveauPlateauTmp, 0),
+liste_pions(NouveauPlateauTmp, Liste),
+remplacer_case(Liste, (0,0), (I,NewOrient), NouvelleListe),
+remplacer_case(NouveauPlateauTmp, Liste, NouvelleListe, NouveauPlateau).
 
 /* jouer_coup, Cas normal */
 jouer_coup(PlateauInitial, [(I,O),Sens,NewOrient], NouveauPlateau, 0):- 
@@ -77,6 +79,13 @@ est_une_case(I1),
 liste_pions(NouveauPlateauTmp, L),
 memberchk((I,O), L),
 remplacer(NouveauPlateauTmp, (I,O), (I1,NewOrient), NouveauPlateau).
+
+/* Cas où on bouge une montagne */
+jouer_coup_2([E,R,M,J], [(I,O),Sens,_], [E,R,NewM,J]):-
+memberchk(I,M),
+case_suivante(I, Sens, I1),
+est_une_case(I1),!,
+remplacer_case(M, I, I1, NewM).
 
 /* Cas d'une sortie du plateau */
 jouer_coup_2(NouveauPlateauTmp, [(I,O),Sens,NewOrient], NouveauPlateau):-

@@ -18,7 +18,7 @@ test9(P, P2):- plateau_test(P), poussee_possible(P, [(44,o),o,o]), jouer_coup(P,
 
 test10(P,P2):- plateau_test(P), poussee_possible(P, [(32,e),e,o]), jouer_coup(P,[(35,n),n,o],P2),affiche_plateau(P),affiche_plateau(P2).
 
-test_jeu(P,P2):-plateau_test(P), jeu_utilisateur(P).
+test_jeu(P):-plateau_gagne(P), jeu_utilisateur(P).
 
 test_coup_possible(P):- plateau_test(P),affiche_plateau(P), coup_possible(P, [(11,n),e,o]).
 
