@@ -14,7 +14,7 @@ jeu_utilisateur([E,R,M,J]):-
 	jeu_utilisateur([NewE, NewR, NewM, JoueurSuivant]).
 
 /* Demande du coup à l'utilisateur */
-demande_case(X, P):- repeat, write('Entrez la case : '), read(X), est_une_case(X),!.
+demande_case(X, _):- repeat, write('Entrez la case : '), read(X), est_une_case(X),!.
 demande_sens(S):- repeat, write('Entrez le sens : '), read(S), \+var(S), est_une_orientation(S), !.
 demande_orientation(O):- repeat, write('Entrez la nouvelle orientation : '), read(O), \+var(O), est_une_orientation(O), !.
 demande_entree(Entree):- repeat, write('Voulez vous bouger le pion (0) ou faire entrer un nouveau pion (1) ? '), read(Entree), integer(Entree), est_1_ou_0(Entree), !.
@@ -26,9 +26,9 @@ demande_coup([(Case, _),Sens, NouvelleOrientation],[E,R,M,J],Entree):-
 	nl,
 	demande_case(Case,[E,R,M,J]), 
 	liste_pions([E,R,M,J],L),
-	demande_coup([(Case, _),Sens, NouvelleOrientation],P,Entree,L).	
+	demande_coup([(Case, _),Sens, NouvelleOrientation],_,Entree,L).	
 
-demande_coup([(Case, _),Sens, NouvelleOrientation],P,_,L):-
+demande_coup([(Case, _),Sens, NouvelleOrientation],_,_,L):-
 	\+memberchk((Case,_), L),!,
 	demande_sens(Sens),
 	demande_orientation(NouvelleOrientation).
@@ -37,12 +37,12 @@ demande_coup([(Case, _),Sens, NouvelleOrientation],P,Entree,L):-
 	demande_entree(Entree),
 	demande_coup2([(Case, _),Sens, NouvelleOrientation],P,Entree,L).
 	
-demande_coup2([(Case, _),Sens, NouvelleOrientation],P,1,L):-
+demande_coup2([(Case, _),Sens, NouvelleOrientation],_,1,_):-
 	demande_sens(Sens),
 	sens_ok(Case, Sens),
 	demande_orientation(NouvelleOrientation).
 	
-demande_coup2([(Case, _),Sens, NouvelleOrientation],P,0,L):-
+demande_coup2([(_, _),Sens, NouvelleOrientation],_,0,_):-
 	demande_sens(Sens),
 	demande_orientation(NouvelleOrientation).
 
@@ -58,7 +58,7 @@ pion_libre(L):-memberchk((0,0),L).
 reste_montagnes([], [E,R,M,J]):-!, nl, write('L\'utilisateur '), write(J), write(' gagne !!'), nl, affiche_plateau([E,R,M,J]), fail.
 reste_montagnes([0|Q], Plateau):-!,
 	reste_montagnes(Q, Plateau).
-reste_montagnes([_|Q], _).
+reste_montagnes([_|_], _).
 
 
 
