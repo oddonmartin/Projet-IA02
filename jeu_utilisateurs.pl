@@ -8,6 +8,8 @@ jeu_utilisateur([E,R,M,J]):-
 	nl, write('Joueur '), write(J),nl,
 	affiche_plateau([E,R,M,J]), write([E,R,M,J]),
 	demande_coup(Coup,[E,R,M,J],Entree),
+	write('Coup='),write(Coup),nl,
+	write('Entree='),write(Entree),nl,
 	coup_utilisateur([E,R,M,J], Coup,[NewE, NewR, NewM, _],Entree),!,
 	reste_montagnes(NewM, [NewE, NewR, NewM, J]),
 	joueur_suivant(J,JoueurSuivant),
@@ -24,16 +26,37 @@ est_une_orientation(n). est_une_orientation(o). est_une_orientation(s). est_une_
 
 demande_coup([(Case, _),Sens, NouvelleOrientation],[E,R,M,J],Entree):- 
 	nl,
-	demande_case(Case,[E,R,M,J]), 
-	liste_pions([E,R,M,J],L),
-	demande_coup([(Case, _),Sens, NouvelleOrientation],_,Entree,L).	
-
-demande_coup([(Case, _),Sens, NouvelleOrientation],_,_,L):-
-	\+memberchk((Case,_), L),!,
+	demande_case(Case,[E,R,M,J]),
 	demande_sens(Sens),
-	demande_orientation(NouvelleOrientation).
+	demande_orientation(NouvelleOrientation),
+	check_entree((Case,_),Sens,[E,R,M,J], Entree).
 	
+check_entree((Case,_),Sens,[E,R,M,J], Entree):-
+	case_bord(Case),
+	liste_pions([E,R,M,J],L),
+	memberchk((Case,_), L),!,
+	demande_entree(Entree).
+	
+check_entree((Case,_),Sens,[E,R,M,J], 1):-
+	case_bord(Case),
+	joueur_suivant(J,J2),
+	liste_pions([E,R,M,J2],L2),
+	memberchk((Case,_), L2).
+	
+check_entree((Case,_),_,_, 1):-
+	case_bord(Case).	
+
+check_entree(_,_,_,0).
+	
+	
+	
+	
+	/*sens_ok(Case, Sens),
+	demande_orientation(NouvelleOrientation).
+
 demande_coup([(Case, _),Sens, NouvelleOrientation],P,Entree,L):-
+	memberchk((Case,_), L),
+	case_bord(Case),
 	demande_entree(Entree),
 	demande_coup2([(Case, _),Sens, NouvelleOrientation],P,Entree,L).
 	
@@ -45,9 +68,20 @@ demande_coup2([(Case, _),Sens, NouvelleOrientation],_,1,_):-
 demande_coup2([(_, _),Sens, NouvelleOrientation],_,0,_):-
 	demande_sens(Sens),
 	demande_orientation(NouvelleOrientation).
+	
+demande_coup([(Case, _),Sens, NouvelleOrientation],P,Entree,L):-
+	memberchk((Case,_), L),
+	demande_sens(Sens),
+	demande_orientation(NouvelleOrientation).
+	
+demande_coup([(Case, _),Sens, NouvelleOrientation],[E,R,M,J],0,L):-
+	demande_sens(Sens),
+	demande_orientation(NouvelleOrientation).*/
+
+	
 
 
-sens_ok(11, n). sens_ok(12, n). sens_ok(13, n). sens_ok(14, n). sens_ok(15, n). sens_ok(11, e). sens_ok(11, e). sens_ok(21, e). sens_ok(21, e). sens_ok(31, e). sens_ok(41, e). sens_ok(51, e). sens_ok(51, s). sens_ok(52, s). sens_ok(53, s). sens_ok(54, s). sens_ok(55, s). sens_ok(55, o). sens_ok(45, o). sens_ok(35, o). sens_ok(25, o). sens_ok(25, o). sens_ok(15, o).
+sens_ok(11, n). sens_ok(12, n). sens_ok(13, n). sens_ok(14, n). sens_ok(15, n). sens_ok(11, e). sens_ok(21, e). sens_ok(21, e). sens_ok(31, e). sens_ok(41, e). sens_ok(51, e). sens_ok(51, s). sens_ok(52, s). sens_ok(53, s). sens_ok(54, s). sens_ok(55, s). sens_ok(55, o). sens_ok(45, o). sens_ok(35, o). sens_ok(25, o). sens_ok(25, o). sens_ok(15, o).
 
 
 joueur_suivant(e,r).

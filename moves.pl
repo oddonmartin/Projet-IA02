@@ -3,7 +3,8 @@
 coup_possible(P, [(I,_), _, _], _):- 
 liste_pions(P, L), memberchk((I,_),L).
 
-coup_possible([E,R,M,J], [(I,_), _, _],1):- liste_pions([E,R,M,J], L), pion_libre(L), case_bord(I), joueur_suivant(J,J2), liste_pions([E,R,M,J2], L2), \+memberchk((I,_),L2).
+coup_possible([E,R,M,J], [(I,_), _, _], 1):- liste_pions([E,R,M,J], L), pion_libre(L), case_bord(I).
+/*, joueur_suivant(J,J2), liste_pions([E,R,M,J2], L2), \+memberchk((I,_),L2).*/
 
 coup_possible(_,_,_):- !, nl, write('Mauvaise entrée, veuillez recommencer'), nl, fail.
 
@@ -77,7 +78,14 @@ jouer_coup_2(NouveauPlateauTmp, [(I,O),Sens,NewOrient], NouveauPlateau):-
 case_suivante(I, Sens, I1),
 est_une_case(I1),
 liste_pions(NouveauPlateauTmp, L),
-memberchk((I,O), L),
+memberchk((I,O), L),!,
+remplacer(NouveauPlateauTmp, (I,O), (I1,NewOrient), NouveauPlateau).
+
+jouer_coup_2(NouveauPlateauTmp, [(I,O),Sens,NewOrient], NouveauPlateau):-
+case_suivante(I, Sens, I1),
+est_une_case(I1),
+joueur_suivant(J,J2), liste_pions([E,R,M,J2], L2),
+memberchk((I1,_), L2),!,
 remplacer(NouveauPlateauTmp, (I,O), (I1,NewOrient), NouveauPlateau).
 
 /* Cas où on bouge une montagne */
@@ -95,6 +103,7 @@ remplacer(NouveauPlateauTmp, (I,O), (0,0), NouveauPlateau).
 jouer_coup_suivant(PlateauInitial, [(I,_),Sens,_], NouveauPlateauTmp, Entree):-
 animaux_check((I,O1),PlateauInitial),!,
 jouer_coup(PlateauInitial,[(I,O1),Sens,O1],NouveauPlateauTmp,Entree).
+
 
 jouer_coup_suivant([E,R,M,J], [(I,_),Sens,_], NouveauPlateauTmp, Entree):-
 memberchk(I,M),!,
