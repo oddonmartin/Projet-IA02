@@ -1,31 +1,37 @@
-% coup=[11,n,o]
-/* Vérifie si le joueur veut jouer un de ses pions ou en faire entrer un => a finir parce que ça marche pas avec l'entrée */
-coup_possible(P, [(I,_), _, _], _):- 
-liste_pions(P, L), memberchk((I,_),L).
 
-coup_possible([E,R,M,J], [(I,_), _, _], 1):- liste_pions([E,R,M,J], L), pion_libre(L), case_bord(I).
-/*, joueur_suivant(J,J2), liste_pions([E,R,M,J2], L2), \+memberchk((I,_),L2).*/
-
-coup_possible(_,_,_):- !, nl, write('Mauvaise entrée, veuillez recommencer'), nl, fail.
-
-case_bord(11). case_bord(12). case_bord(13). case_bord(14). case_bord(15). 
-case_bord(21). case_bord(31). case_bord(41). case_bord(51). 
-case_bord(25). case_bord(35). case_bord(45). 
-case_bord(52). case_bord(53). case_bord(54). case_bord(55). 
-
-coup_possible([E,R,M,_], [Depart, Sens, _]):- case_suivante(Depart,Sens,I1), \+animaux_check((I1,_),[E,R,M,_]), \+memberchk(I1,M).
-
-liste_pions([E,_,_,e], E).
-liste_pions([_,R,_,r], R).
+/* exemple de coup=[11,n,o] */
 
 
-poussee_possible(P, [(I,_),Sens,_]):-poussee_possible(P, I, Sens, 1).
+/* coup_ok vérifie si le joueur veut jouer un de ses pions ou en faire entrer un */
+coup_ok(P, [(I,_), Sens, _], 0):- 
+	liste_pions(P, L), memberchk((I,_),L),!.
+	
+coup_ok([E,R,M,J], [(I,_), _, _], 1):- 
+	liste_pions([E,R,M,J], L), 
+	pion_libre(L), 
+	case_bord(I).
+
+coup_ok(_,_,_):- !, 
+	nl, write('Mauvaise entrée, veuillez recommencer'), nl, fail.
+
+	
+/* coup_possible vérfie qu'il n'y a pas de pions sur la case suivante */
+coup_possible(P, [(I,_), Sens, _]):- 
+	case_suivante(I,Sens,I1),
+	\+animaux_check((I,_),P).
+
+
+
+
+/* poussee_possible vérifie que la poussee des autres pions est possible à l'aide d'un compteur */
+poussee_possible(P, [(I,Sens),Sens,_]):-poussee_possible(P, I, Sens, 1).
 poussee_possible(P, I, O, _):- case_suivante(I, O, I1), case_vide(P, I1),!.
 poussee_possible(P, I, O, X1):-
 	case_suivante(I, O, I1),
 	compteur(P, I1, O, X),
 	X2 is X1 + X,
 	X2>0, poussee_possible(P, I1, O, X2).
+
 
 compteur(P, I, O, 1):- animaux_check((I,O),P), !.
 compteur(P, I, O, -1):- inverse_dir(O, O1), animaux_check((I,O1),P), !.
@@ -54,63 +60,12 @@ case_suivante(I,o,I1):- est_une_case(I), case_ouest(I,I1), !.
 
 case_vide([E,R,M,_],I):- \+animaux_check((I,_),[E,R,M,_]), \+memberchk(I,M).
 
+liste_pions([E,_,_,e], E).
+liste_pions([_,R,_,r], R).
 
 
 
-
-
-
-/* jouer_coup, Cas entrée sur le plateau */
-jouer_coup(PlateauInitial, [(I,_),Sens,NewOrient], NouveauPlateau, 1):- 
-/*case_suivante(I, Sens, I1), */
-jouer_coup_suivant(PlateauInitial, [(I,_),Sens,_], NouveauPlateauTmp, 0),
-liste_pions(NouveauPlateauTmp, Liste),
-remplacer_case(Liste, (0,0), (I,NewOrient), NouvelleListe),
-remplacer_case(NouveauPlateauTmp, Liste, NouvelleListe, NouveauPlateau).
-
-/* jouer_coup, Cas normal */
-jouer_coup(PlateauInitial, [(I,O),Sens,NewOrient], NouveauPlateau, 0):- 
-case_suivante(I, Sens, I1), 
-jouer_coup_suivant(PlateauInitial, [(I1,_),Sens,_], NouveauPlateauTmp, 0),
-jouer_coup_2(NouveauPlateauTmp, [(I,O),Sens,NewOrient], NouveauPlateau).
-
-jouer_coup_2(NouveauPlateauTmp, [(I,O),Sens,NewOrient], NouveauPlateau):-
-case_suivante(I, Sens, I1),
-est_une_case(I1),
-liste_pions(NouveauPlateauTmp, L),
-memberchk((I,O), L),!,
-remplacer(NouveauPlateauTmp, (I,O), (I1,NewOrient), NouveauPlateau).
-
-jouer_coup_2(NouveauPlateauTmp, [(I,O),Sens,NewOrient], NouveauPlateau):-
-case_suivante(I, Sens, I1),
-est_une_case(I1),
-joueur_suivant(J,J2), liste_pions([E,R,M,J2], L2),
-memberchk((I1,_), L2),!,
-remplacer(NouveauPlateauTmp, (I,O), (I1,NewOrient), NouveauPlateau).
-
-/* Cas où on bouge une montagne */
-jouer_coup_2([E,R,M,J], [(I,_),Sens,_], [E,R,NewM,J]):-
-memberchk(I,M),
-case_suivante(I, Sens, I1),
-est_une_case(I1),!,
-remplacer_case(M, I, I1, NewM).
-
-/* Cas d'une sortie du plateau */
-jouer_coup_2(NouveauPlateauTmp, [(I,O),_,_], NouveauPlateau):-
-remplacer(NouveauPlateauTmp, (I,O), (0,0), NouveauPlateau).
-
-
-jouer_coup_suivant(PlateauInitial, [(I,_),Sens,_], NouveauPlateauTmp, Entree):-
-animaux_check((I,O1),PlateauInitial),!,
-jouer_coup(PlateauInitial,[(I,O1),Sens,O1],NouveauPlateauTmp,Entree).
-
-
-jouer_coup_suivant([E,R,M,J], [(I,_),Sens,_], NouveauPlateauTmp, Entree):-
-memberchk(I,M),!,
-jouer_coup([E,R,M,J],[(I,m),Sens,_],NouveauPlateauTmp,Entree).
-
-jouer_coup_suivant(PlateauInitial, _, PlateauInitial, _).
-
+/* MODIFICATION DU PLATEAU */
 
 remplacer([E,R,M,J], Case, NewCase, [NewPlateau,R,M,J]):- memberchk(Case,E), remplacer_case(E, Case, NewCase, NewPlateau),!.
 remplacer([E,R,M,J], Case, NewCase, [E, NewPlateau, M, J]):- memberchk(Case,R), remplacer_case(R, Case, NewCase, NewPlateau),!.

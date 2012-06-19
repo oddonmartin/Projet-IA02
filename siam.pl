@@ -2,9 +2,9 @@
 
 %siam.pl
 :- include('init_affichage.pl').
-/*:- include('moves.pl').*/           
+:- include('moves.pl').
 :- include('jeu_utilisateurs.pl').
-:- include('ia.pl').
+/*:- include('ia.pl').*/
 :- initialization(test_jeu(X)).
 
 depart(X):-plateau_test(X), affiche_plateau(X).
