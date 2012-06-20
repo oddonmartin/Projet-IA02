@@ -1,17 +1,19 @@
+
+/* Initialisation du plateau */
 plateau_depart(X):- X =[[(0,0),(0,0),(0,0),(0,0),(0,0)],[(0,0),(0,0),(0,0),(0,0),(0,0)],
 [32,33,34],e].
 
-plateau_test(X):- X =[[(22,n),(42,n),(0,0),(0,0),(0,0)],[(11,n),(0,0),(0,0),(0,0),(0,0)],[32,33,34],e].
 
-plateau_gagne(X):- X =[[(45,n),(0,0),(0,0),(0,0),(0,0)],[(11,n),(0,0),(0,0),(0,0),(0,0)],[0,0,55],e].
-
+/* Affichage du plateau */
 affiche_plateau(X) :- ligne(1,X),!.
 
+/* Boucle pour les lignes */
 ligne(0,X):-ligne(1,X).
 ligne(I,X):- I<6,!, colonnes(1,X), nl, I_Affichage is 6-I, write(I_Affichage), colonnes2(1,I,X),nl, New_i is I+1, ligne(New_i,X).
 ligne(6,X):-colonnes(1,X),nl,chiffres(1).
 ligne(I,_):-I>5.
 
+/* Boucle pour les colonnes */
 chiffres(I):- I<6, !, write('   '), write(I), write(''), New_I is I+1, chiffres(New_I).
 chiffres(_):- nl.
 colonnes(1,X):- !, write('  ____'), colonnes(2,X).
@@ -22,6 +24,7 @@ colonnes2(J,I,X):- J<6,!, write('|'), K is 6-I, afficher_pion(K,J,X), New_J is J
 colonnes2(6,_,_):-write('|'),!.
 colonnes2(J,_,_):- J>5.
 
+/* Affichage du pion et de son orientation */
 afficher_pion(I,J,[E,_,_,_]):-Case is I*10+J, memberchk((Case,D),E),!, write(' e'), affiche_orientation(D).
 afficher_pion(I,J,[_,R,_,_]):-Case is I*10+J, memberchk((Case,D),R),!, write(' r'), affiche_orientation(D).
 afficher_pion(I,J,[_,_,M,_]):-Case is I*10+J, memberchk(Case,M),!, write(' m ').

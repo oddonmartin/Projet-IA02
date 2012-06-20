@@ -24,3 +24,5 @@ test_coup_possible(P):- plateau_test(P),affiche_plateau(P), coup_possible(P, [(1
 
 test11(P,L) :- plateau_test(P), affiche_plateau(P), coups_possibles(P,L).
 test12(P):- plateau_test(P), affiche_plateau(P), coup_possible(P,[22,e,_]).
+
+plateau_test(X):- X =[[(22,n),(42,n),(0,0),(0,0),(0,0)],[(11,n),(0,0),(0,0),(0,0),(0,0)],[32,33,34],e].
